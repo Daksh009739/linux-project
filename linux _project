@@ -1,0 +1,67 @@
+//Create a New File
+
+touch expense_tracker.sh
+chmod +x expense_tracker.sh
+
+//Write the Script
+
+#!/bin/bash
+
+FILE="expenses.csv"
+
+# Create file if it doesn't exist
+if [ ! -f $FILE ]; then
+  echo "Date,Category,Amount,Description" > $FILE
+fi
+
+# Function to add an expense
+add_expense() {
+  echo "Enter date (YYYY-MM-DD):"
+  read date
+  echo "Enter category (e.g., Food, Transport, Rent):"
+  read category
+  echo "Enter amount:"
+  read amount
+  echo "Enter description:"
+  read description
+  echo "$date,$category,$amount,$description" >> $FILE
+  echo "Expense added!"
+}
+
+# Function to view expenses
+view_expenses() {
+  echo "All expenses:"
+  column -s, -t < $FILE | less
+}
+
+# Function to view expenses by category
+view_by_category() {
+  echo "Enter category to filter by:"
+  read category
+  grep $category $FILE | column -s, -t | less
+}
+
+# Main Menu
+while true; do
+  echo "Expense Tracker"
+  echo "1. Add an expense"
+  echo "2. View all expenses"
+  echo "3. View expenses by category"
+  echo "4. Exit"
+  echo "Choose an option:"
+  read option
+
+  case $option in
+    1) add_expense ;;
+    2) view_expenses ;;
+    3) view_by_category ;;
+    4) exit ;;
+    *) echo "Invalid option" ;;
+  esac
+done
+
+
+//Running the Script
+
+./expense_tracker.sh
+
